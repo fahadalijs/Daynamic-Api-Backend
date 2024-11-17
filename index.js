@@ -65,6 +65,65 @@ app.get("/user/:id", (req, res) => {
 });
 
 
+
+// delete user
+
+app.delete("/users/:id" , (req , res) =>{
+    
+  const {id} = req.params;
+
+  const index = users.findIndex((item) =>{
+    return item.id === +id;
+  })
+   
+  if (index === -1) {
+    res.status(404).json({
+      message: "no user found"
+    })
+    return
+  }
+   users.splice(index , 1);
+   res.status(200).json({
+    message: "user deleted succesfully",
+     data: users
+   });
+});
+
+
+// edit user
+
+
+app.put("/users/:id" , (req , res) =>{
+
+  const {id} = req.params;
+  const {title} = req.body;
+
+  const index = users.findIndex(item => item.id === +id)
+  
+  if (index === -1) {
+    res.status(404).json({
+      message: "No user Found"
+    })
+    return
+  }
+  if (!title) {
+    res.status(400).json({
+        message: "title is required",
+    });
+    return;
+  }
+  users[index].title = title;
+   res.status(200).json({
+    message: "user edited succesfully",
+    data: users,
+
+   })
+})
+
+
+
+
+
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
 })
